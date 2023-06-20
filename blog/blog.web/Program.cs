@@ -1,5 +1,6 @@
 using blog.web.Data;
 using blog.web.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace blog.web
@@ -14,9 +15,17 @@ namespace blog.web
             builder.Services.AddControllersWithViews();
 
 
-            // inject DbContext and it seems hard coded
+            // inject DbContext 
             builder.Services.AddDbContext<BloggieDbContext>(options =>
            options.UseSqlServer(builder.Configuration.GetConnectionString("BlDbConnectionString")));
+
+            // inject DbContext for auth 
+            builder.Services.AddDbContext<AuthDbContext>(options =>
+           options.UseSqlServer(builder.Configuration.GetConnectionString("BlAuthDBConnectionString")));
+
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
+
+
 
             builder.Services.AddScoped<ITagRepository, TagRepository>();
             builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
@@ -37,6 +46,7 @@ namespace blog.web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
