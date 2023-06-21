@@ -64,9 +64,15 @@ namespace blog.web.Controllers
 
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string RetirnUrl )
         {
-            return View();
+            var model = new LoginViewModel
+
+            {
+                ReturnUrl = RetirnUrl,
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -76,6 +82,11 @@ namespace blog.web.Controllers
 
             if (sign != null && sign.Succeeded)
             {
+                if(!string.IsNullOrWhiteSpace(loginViewModel.ReturnUrl))
+                {
+                    return Redirect(loginViewModel.ReturnUrl);
+                }
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -88,6 +99,13 @@ namespace blog.web.Controllers
             await _signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Home");   
+        }
+
+
+        [HttpGet]
+        public IActionResult AccessDenied  ()
+        {
+            return View();
         }
     }
 }

@@ -2,11 +2,13 @@
 using blog.web.Models.Domain;
 using blog.web.Models.ViewModels;
 using blog.web.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace blog.web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminBlogPostController : Controller
     {
 
