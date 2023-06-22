@@ -1,4 +1,9 @@
-﻿@model blog.web.Models.Domain.BlogPost
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> signInM;
+@inject UserManager<IdentityUser> userManger;
+
+
+@model blog.web.Models.ViewModels.BlogDetailsViewModel
 
 @{
 
@@ -26,6 +31,35 @@
                     <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
                 
                 </div>
+                <div class="mb-3">
+                    @if (signInM.IsSignedIn(User))
+                    {
+
+                        if (Model.Liked)
+                        {
+
+                            <a style="cursor: pointer">
+
+                                <i class="bi bi-hand-thumbs-up-fill"></i>
+                            </a>
+
+                        }
+                        else
+                        {
+
+                            <a id="btnLike" style="cursor: pointer">
+
+                                <i class="bi bi-hand-thumbs-up"></i> 
+                            </a>
+
+                        }
+                    }
+
+                    
+                    <span id="totalLikes">@Model.TotalLikes</span> likes
+                </div>
+
+
 
                 <div class="mb-3 d-flex">
                     @foreach (var tag in Model.Tags)
@@ -57,3 +91,54 @@
 
 
 </div>
+
+ @*public Guid BlogPostId { get; set; }
+
+        public Guid UserId { get; set; }*@
+
+@section Scripts{
+    <script>
+
+        var btnLikeElement = document.getElementById('btnLike');
+
+        var totalLikesElement = document.getElementById('totalLikes');
+
+        async function gettotalLikes(){
+            fetch('/api/blogpostlike/@Model.Id/totalLikes',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                }
+            })
+                .then(data => data.json()).then(result => totalLikesElement.innerHTML = result);
+        }
+
+        async function addLikeForBlog(){
+            fetch('/api/BlogPostLike/Add',{
+                method : 'POST',
+                headers:{
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+                },
+                body: JSON.stringify({
+                    blogPostId: '@Model.Id',
+                    UserId: '@userManger.GetUserId(User)'
+                })
+
+            }).then(() => {
+                btnLikeElement.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
+
+                btnLikeElement.removeEventListener('click', addLikeForBlog);
+                
+                gettotalLikes();
+
+            });
+        }
+
+
+
+        btnLikeElement.addEventListener('click', addLikeForBlog);
+    </script>
+
+}

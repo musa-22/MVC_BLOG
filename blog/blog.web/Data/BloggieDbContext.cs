@@ -13,7 +13,11 @@ namespace blog.web.Data
 
         public DbSet<BlogPost> BlogPosts { get; set; }
 
+
         public DbSet<Tag> Tags { get; set; }
+
+
+        public DbSet<BlogPostLiks> BlogPostsLiks { get; set; }
     }
 
 }

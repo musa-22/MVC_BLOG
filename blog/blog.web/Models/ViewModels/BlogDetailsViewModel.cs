@@ -1,7 +1,10 @@
-﻿namespace blog.web.Models.Domain
+﻿using blog.web.Models.Domain;
+
+namespace blog.web.Models.ViewModels
 {
-    public class BlogPost
+    public class BlogDetailsViewModel
     {
+
 
         public Guid Id { get; set; }
 
@@ -19,15 +22,15 @@
 
         public DateTime PublishedDate { get; set; }
 
-        public string  Author { get; set; }
+        public string Author { get; set; }
 
         public bool Visible { get; set; }
 
-
-        // create one to many 
-
         public ICollection<Tag> Tags { get; set; }
 
-        public ICollection<BlogPostLiks> Likes { get; set; }
-    }   
+        public int TotalLikes { get; set; }
+
+        public bool Liked { get; set; }
+
+    }
 }
