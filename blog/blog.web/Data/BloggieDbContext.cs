@@ -18,6 +18,8 @@ namespace blog.web.Data
 
 
         public DbSet<BlogPostLiks> BlogPostsLiks { get; set; }
+
+        public DbSet<BlogPostComment> BlogPostComments { get; set; }
     }
 
 }
