@@ -32,5 +32,8 @@ namespace blog.web.Models.ViewModels
 
         public bool Liked { get; set; }
 
+        public string CommentDescrtpion { get; set; }
+
+        public IEnumerable<BlogComment> Comments { get; set; }
     }
 }
