@@ -16,7 +16,9 @@
                 <div class="mb-3">
                     <label class="form-label">UserName</label>
 
-                    <input type="text" class="form-control" id="username" asp-for="Username" />
+                    <input type="text" class="form-control" id="username" asp-for="Username" required/>
+                    <span class="text-danger" asp-validation-for="Username"></span>
+
                 </div>
 
 
@@ -24,7 +26,8 @@
                 <div class="mb-3">
                     <label class="form-label">Password</label>
 
-                    <input type="password" class="form-control" id="password" asp-for="Password" />
+                    <input type="password" class="form-control" id="password" asp-for="Password" required />
+                    <span class="text-danger" asp-validation-for="Password"></span>
                 </div>
 
 

@@ -1,14 +1,21 @@
-﻿namespace blog.web.Models.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace blog.web.Models.ViewModels
 {
     public class RegisterViewModel
     {
+        [Required]
+        public string Username { get; set; }
 
-     public string Username { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
 
-     public string Email { get; set; }
 
+        [Required]
+        [MinLength(6)]
+        public string Password { get; set; }
 
-     public string Password { get; set; }
 
     }
 }

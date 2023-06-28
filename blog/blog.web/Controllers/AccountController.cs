@@ -34,31 +34,37 @@ namespace blog.web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
-            var IdentityUser = new IdentityUser
 
+            if (ModelState.IsValid)
             {
-                UserName = registerViewModel.Username,
-                Email = registerViewModel.Email
+                var IdentityUser = new IdentityUser
 
-
-            };
-
-            var Identitysresult = await _userManager.CreateAsync(IdentityUser, registerViewModel.Password);
-
-            if (Identitysresult.Succeeded)
-            {
-                // pass user role
-
-             var roleIdentityResult =   await _userManager.AddToRoleAsync(IdentityUser, "User");
-
-                if (roleIdentityResult.Succeeded)
                 {
-                    // if success
-                    return RedirectToAction("Register");
-                }
+                    UserName = registerViewModel.Username,
+                    Email = registerViewModel.Email
 
+
+                };
+
+                var Identitysresult = await _userManager.CreateAsync(IdentityUser, registerViewModel.Password);
+
+                if (Identitysresult.Succeeded)
+                {
+                    // pass user role
+
+                    var roleIdentityResult = await _userManager.AddToRoleAsync(IdentityUser, "User");
+
+                    if (roleIdentityResult.Succeeded)
+                    {
+                        // if success
+                        return RedirectToAction("Register");
+                    }
+
+                }
             }
-            // if error
+
+            
+            // if error show message
             return View();
         }
 
@@ -66,6 +72,8 @@ namespace blog.web.Controllers
         [HttpGet]
         public IActionResult Login(string RetirnUrl )
         {
+
+
             var model = new LoginViewModel
 
             {
@@ -78,17 +86,24 @@ namespace blog.web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            var sign = await _signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
 
-            if (sign != null && sign.Succeeded)
+            if (ModelState.IsValid)
             {
-                if(!string.IsNullOrWhiteSpace(loginViewModel.ReturnUrl))
+
+                var sign = await _signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
+
+                if (sign != null && sign.Succeeded)
                 {
-                    return Redirect(loginViewModel.ReturnUrl);
+                    if (!string.IsNullOrWhiteSpace(loginViewModel.ReturnUrl))
+                    {
+                        return Redirect(loginViewModel.ReturnUrl);
+                    }
+
+                    return RedirectToAction("Index", "Home");
                 }
 
-                return RedirectToAction("Index", "Home");
             }
+
 
             return View();
         }

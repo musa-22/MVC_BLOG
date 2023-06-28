@@ -34,6 +34,11 @@ namespace blog.web.Controllers
         public async Task<IActionResult> Add(AddTagRequest addTagRequest)
         {
 
+            if (ModelState.IsValid)
+            {
+                return View();
+            }
+
             // var name = addTagRequest.Name;
             //var displayName = addTagRequest.DisplayName;
 
